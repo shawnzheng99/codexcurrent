@@ -6,9 +6,9 @@ enum TaskActivity: Equatable, Sendable {
     case active, idle, unknown
     var label: String {
         switch self {
-        case .active: "任务运行中"
-        case .idle: "当前闲置"
-        case .unknown: "任务状态未知"
+        case .active: L10n.text("activity.active")
+        case .idle: L10n.text("activity.idle")
+        case .unknown: L10n.text("activity.unknown")
         }
     }
     var refreshSeconds: Double { self == .active ? 10 : 900 }

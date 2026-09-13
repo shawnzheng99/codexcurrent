@@ -55,8 +55,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         alert.messageText = alertTitle(for: problem)
         alert.informativeText = problem.message
         alert.addButton(withTitle: recoveryButtonTitle(for: problem))
-        alert.addButton(withTitle: "重新检查")
-        alert.addButton(withTitle: "退出")
+        alert.addButton(withTitle: L10n.text("alert.retry"))
+        alert.addButton(withTitle: L10n.text("alert.quit"))
 
         switch alert.runModal() {
         case .alertFirstButtonReturn:
@@ -75,19 +75,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func alertTitle(for problem: UsageProblem) -> String {
         switch problem {
-        case .cliNotInstalled: "需要安装 Codex CLI"
-        case .loginRequired: "需要登录 Codex CLI"
-        case .versionUnavailable, .incompatible: "需要更新 Codex CLI"
-        case .timedOut, .serviceUnavailable: "无法连接 Codex CLI"
+        case .cliNotInstalled: L10n.text("alert.installTitle")
+        case .loginRequired: L10n.text("alert.loginTitle")
+        case .versionUnavailable, .incompatible: L10n.text("alert.updateTitle")
+        case .timedOut, .serviceUnavailable: L10n.text("alert.connectTitle")
         }
     }
 
     private func recoveryButtonTitle(for problem: UsageProblem) -> String {
         switch problem {
-        case .cliNotInstalled: "打开安装指南"
-        case .loginRequired: "打开登录指南"
-        case .versionUnavailable, .incompatible: "打开升级指南"
-        case .timedOut, .serviceUnavailable: "查看帮助"
+        case .cliNotInstalled: L10n.text("alert.installGuide")
+        case .loginRequired: L10n.text("alert.loginGuide")
+        case .versionUnavailable, .incompatible: L10n.text("alert.updateGuide")
+        case .timedOut, .serviceUnavailable: L10n.text("alert.help")
         }
     }
 }

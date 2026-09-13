@@ -5,8 +5,8 @@ enum CodexStatus: String, Sendable {
 
     var title: String {
         switch self {
-        case .idle: "Codex 空闲"
-        case .unavailable: "等待 Codex CLI"
+        case .idle: L10n.text("status.idle")
+        case .unavailable: L10n.text("status.unavailable")
         }
     }
 
@@ -23,10 +23,10 @@ enum DataSourceQuality: String, Sendable {
 
     var label: String {
         switch self {
-        case .live: "实时"
-        case .cached: "缓存"
-        case .estimated: "估算"
-        case .unavailable: "不可用"
+        case .live: L10n.text("source.live")
+        case .cached: L10n.text("source.cached")
+        case .estimated: L10n.text("source.estimated")
+        case .unavailable: L10n.text("source.unavailable")
         }
     }
 }
@@ -42,18 +42,18 @@ enum UsageProblem: Equatable, Sendable {
     var message: String {
         switch self {
         case .cliNotInstalled:
-            "尚未安装 Codex CLI。"
+            L10n.text("problem.cliNotInstalled")
         case .versionUnavailable:
-            "无法确认 Codex CLI 版本。"
+            L10n.text("problem.versionUnavailable")
         case let .loginRequired(version):
-            "Codex CLI \(version) 尚未登录，请先运行 codex login。"
+            L10n.format("problem.loginRequired", version)
         case let .incompatible(version):
-            version.map { "Codex CLI \($0) 不支持所需的额度接口，请升级后重试。" }
-                ?? "当前 Codex CLI 不支持所需的额度接口，请升级后重试。"
+            version.map { L10n.format("problem.incompatibleVersion", $0) }
+                ?? L10n.text("problem.incompatible")
         case .timedOut:
-            "读取 Codex 用量超时，请检查网络后重试。"
+            L10n.text("problem.timedOut")
         case .serviceUnavailable:
-            "Codex CLI 暂时无法返回额度状态。"
+            L10n.text("problem.serviceUnavailable")
         }
     }
 
@@ -90,7 +90,7 @@ struct UsageSnapshot: Equatable, Sendable {
         primaryWindow: nil, secondaryWindow: nil, availableResetCount: nil,
         status: .unavailable,
         source: .unavailable, updatedAt: .now,
-        message: "正在连接 Codex CLI。",
+        message: L10n.text("snapshot.connecting"),
         cliVersion: nil,
         problem: nil
     )
@@ -115,13 +115,13 @@ struct UsageSnapshot: Equatable, Sendable {
     }
 
     var summary: String {
-        if let remainingPercent { return "剩余 \(Int(remainingPercent.rounded()))% · \(source.label)" }
-        return message ?? "暂无额度数据"
+        if let remainingPercent { return L10n.format("snapshot.remaining", Int(remainingPercent.rounded()), source.label) }
+        return message ?? L10n.text("snapshot.noData")
     }
 
     var resetSummary: String? {
         guard let resetDate else { return nil }
-        return "重置 \(resetDate.formatted(.relative(presentation: .named)))"
+        return L10n.format("snapshot.reset", resetDate.formatted(.relative(presentation: .named)))
     }
 
     static func failure(_ problem: UsageProblem, version: String? = nil) -> UsageSnapshot {
@@ -161,9 +161,10 @@ enum CreditExpiry: Equatable {
 
     var label: String {
         switch self {
-        case .never: "不过期"
-        case .expired: "已过期"
-        case .days(let days): "剩 \(days) 天"
+        case .never: L10n.text("credit.never")
+        case .expired: L10n.text("credit.expired")
+        case .days(1): L10n.text("credit.oneDay")
+        case .days(let days): L10n.format("credit.days", days)
         }
     }
 
@@ -187,15 +188,18 @@ enum RefreshInterval {
 }
 
 enum ResetCountdown {
-    static func weekly(_ date: Date?, now: Date, calendar: Calendar = .current) -> String {
-        guard let date else { return "重置时间 —" }
+    static func weekly(_ date: Date?, now: Date, calendar: Calendar = .current, language: AppLanguage = .system) -> String {
+        guard let date else { return L10n.text("reset.noTime", language: language) }
         let seconds = date.timeIntervalSince(now)
-        if seconds <= 0 { return "即将重置" }
+        if seconds <= 0 { return L10n.text("reset.soon", language: language) }
         if calendar.isDate(date, inSameDayAs: now) {
             let hour = calendar.component(.hour, from: date)
             let minute = calendar.component(.minute, from: date)
-            return String(format: "今天 %02d:%02d 重置", hour, minute)
+            return L10n.format("reset.today", language: language, hour, minute)
         }
-        return "还剩 \(Int(ceil(seconds / 86_400))) 天重置"
+        let days = Int(ceil(seconds / 86_400))
+        return days == 1
+            ? L10n.text("reset.oneDay", language: language)
+            : L10n.format("reset.days", language: language, days)
     }
 }

@@ -412,7 +412,7 @@ enum RateLimitMapper {
                                  availableResetCount: availableResetCount(from: payload),
                                  status: .idle,
                                  source: .live, updatedAt: .now,
-                                 message: "Codex 未返回可显示的额度窗口。",
+                                 message: L10n.text("usage.noWindows"),
                                  cliVersion: version, problem: nil, resetCredits: resetCredits(from: payload))
         }
         return UsageSnapshot(

@@ -4,6 +4,7 @@ set -euo pipefail
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
 app_path="$project_root/Build/Codex Current.app"
 binary_path="$project_root/.build/release/CodexCurrent"
+resource_bundle="$project_root/.build/release/CodexCurrent_CodexCurrent.bundle"
 icon_source="$project_root/app_icon.png"
 sign_identity="${CODE_SIGN_IDENTITY:--}"
 
@@ -14,6 +15,7 @@ rm -rf "$app_path"
 mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources"
 cp "$binary_path" "$app_path/Contents/MacOS/CodexCurrent"
 cp "$project_root/Packaging/Info.plist" "$app_path/Contents/Info.plist"
+cp -R "$resource_bundle" "$app_path/Contents/Resources/"
 zsh "$project_root/scripts/make-icon.sh" "$icon_source" "$app_path/Contents/Resources/AppIcon.icns"
 
 if [[ "$sign_identity" == "-" ]]; then

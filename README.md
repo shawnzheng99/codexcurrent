@@ -31,6 +31,7 @@ If that happens to fit your workflow, it might save you a few clicks — and per
 - Fits around the MacBook notch; on Macs without a notch, it lives in the menu bar.
 - Refreshes more often while a local Codex desktop task is running and less often while idle.
 - Uses a native SwiftUI interface with no ads, analytics SDK, or extra account.
+- Follows your macOS language automatically, with English and Simplified Chinese included. Unsupported languages fall back to English.
 
 That is essentially it. Codex Current is meant to be a small, focused tool rather than another dashboard you need to manage.
 
@@ -49,7 +50,7 @@ That is essentially it. Codex Current is meant to be a small, focused tool rathe
 ## How to use it
 
 - **MacBook with a notch:** click the compact display near the notch to open the full panel. Click outside it to close.
-- **Mac without a notch:** click the percentage in the menu bar and choose **展开面板** to open the panel.
+- **Mac without a notch:** click the percentage in the menu bar and choose **Open panel** to open the panel.
 - **Automatic refresh:** enabled by default. It checks every 10 seconds while a local Codex task is active and every 15 minutes while idle.
 - **Manual refresh:** choose 30 seconds, 1, 5, 10, 15, or 30 minutes. Your preference is saved automatically.
 

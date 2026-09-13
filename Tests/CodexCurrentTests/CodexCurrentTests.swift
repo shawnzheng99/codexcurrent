@@ -26,7 +26,7 @@ import Testing
 @Test func missingCLIHasActionableError() {
     let snapshot = UsageSnapshot.failure(.cliNotInstalled)
     #expect(snapshot.problem == .cliNotInstalled)
-    #expect(snapshot.message == "尚未安装 Codex CLI。")
+    #expect(snapshot.message == L10n.text("problem.cliNotInstalled"))
 }
 
 @Test func mapsOnlyRateLimitData() {
@@ -98,9 +98,9 @@ import Testing
 
 @Test func countdownAndExpiryBoundaries() {
     let now = Date(timeIntervalSince1970: 1000)
-    #expect(ResetCountdown.weekly(nil, now: now) == "重置时间 —")
-    #expect(ResetCountdown.weekly(now, now: now) == "即将重置")
-    #expect(ResetCountdown.weekly(now.addingTimeInterval(86401), now: now) == "还剩 2 天重置")
+    #expect(ResetCountdown.weekly(nil, now: now, language: .english) == "Reset time —")
+    #expect(ResetCountdown.weekly(now, now: now, language: .english) == "Resetting soon")
+    #expect(ResetCountdown.weekly(now.addingTimeInterval(86401), now: now, language: .english) == "Resets in 2 days")
     for (seconds, expected, urgency) in [(0.0, CreditExpiry.expired, 2), (1, .days(1), 2), (86400, .days(1), 2), (86401, .days(2), 1), (259200, .days(3), 1), (259201, .days(4), 0)] {
         let expiry = ResetCredit(id: "test", expiresAt: now.addingTimeInterval(seconds)).expiry(at: now)
         #expect(expiry == expected)
@@ -135,11 +135,17 @@ private struct TestUsageProvider: CodexUsageProviding {
     let now = calendar.date(from: DateComponents(year: 2026, month: 9, day: 7, hour: 10))!
     let today = calendar.date(from: DateComponents(year: 2026, month: 9, day: 7, hour: 23, minute: 45))!
     let tomorrow = calendar.date(from: DateComponents(year: 2026, month: 9, day: 8, hour: 0, minute: 5))!
-    #expect(ResetCountdown.weekly(today, now: now, calendar: calendar) == "今天 23:45 重置")
-    #expect(ResetCountdown.weekly(tomorrow, now: now, calendar: calendar) == "还剩 1 天重置")
-    #expect(ResetCountdown.weekly(now, now: now, calendar: calendar) == "即将重置")
+    #expect(ResetCountdown.weekly(today, now: now, calendar: calendar, language: .simplifiedChinese) == "今天 23:45 重置")
+    #expect(ResetCountdown.weekly(tomorrow, now: now, calendar: calendar, language: .simplifiedChinese) == "还剩 1 天重置")
+    #expect(ResetCountdown.weekly(now, now: now, calendar: calendar, language: .simplifiedChinese) == "即将重置")
     calendar.timeZone = TimeZone(secondsFromGMT: -7 * 3600)!
-    #expect(ResetCountdown.weekly(today, now: now, calendar: calendar) == "还剩 1 天重置")
+    #expect(ResetCountdown.weekly(today, now: now, calendar: calendar, language: .simplifiedChinese) == "还剩 1 天重置")
+}
+
+@Test func localizesEnglishAndSimplifiedChinese() {
+    #expect(L10n.text("menu.openPanel", language: .english) == "Open panel")
+    #expect(L10n.text("menu.openPanel", language: .simplifiedChinese) == "展开面板")
+    #expect(L10n.format("problem.loginRequired", language: .english, "1.2.3").contains("1.2.3"))
 }
 
 @Test @MainActor func automaticRefreshTracksActivityWithoutOverwritingManualPreference() {

@@ -205,7 +205,7 @@ final class IslandController: NSObject, ObservableObject {
             ]
         )
         item.button?.toolTip = latestSnapshot.summary
-        item.button?.setAccessibilityLabel("Codex 剩余额度 \(title)")
+        item.button?.setAccessibilityLabel(L10n.format("accessibility.remaining", title))
 
         let menu = NSMenu()
         let summaryItem = NSMenuItem(title: latestSnapshot.summary, action: nil, keyEquivalent: "")
@@ -217,18 +217,18 @@ final class IslandController: NSObject, ObservableObject {
             menu.addItem(versionItem)
         }
         menu.addItem(.separator())
-        let expandItem = NSMenuItem(title: "展开面板", action: #selector(expandFromStatusItem), keyEquivalent: "")
+        let expandItem = NSMenuItem(title: L10n.text("menu.openPanel"), action: #selector(expandFromStatusItem), keyEquivalent: "")
         expandItem.target = self
         menu.addItem(expandItem)
         let refreshItem = NSMenuItem(
-            title: latestIsRefreshing ? "正在刷新…" : "立即刷新",
+            title: latestIsRefreshing ? L10n.text("menu.refreshing") : L10n.text("menu.refreshNow"),
             action: #selector(refreshFromStatusItem),
             keyEquivalent: "r"
         )
         refreshItem.target = self
         refreshItem.isEnabled = !latestIsRefreshing
         menu.addItem(refreshItem)
-        let quitItem = NSMenuItem(title: "退出 Codex Current", action: #selector(quit), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: L10n.text("menu.quit"), action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
         item.menu = menu
@@ -364,11 +364,11 @@ struct TerminalIslandContent: View {
             rule
             TimelineView(.periodic(from: .now, by: 30)) { context in
                 HStack(alignment: .top, spacing: 18) {
-                    metric(title: snapshot.fiveHourWindow == nil && snapshot.weeklyWindow == nil ? "剩余额度" : "5h 剩余",
+                    metric(title: snapshot.fiveHourWindow == nil && snapshot.weeklyWindow == nil ? L10n.text("panel.remaining") : L10n.text("panel.fiveHourRemaining"),
                            window: snapshot.fiveHourWindow ?? (snapshot.weeklyWindow == nil ? snapshot.headlineWindow : nil),
                            weekly: false, now: context.date)
                     verticalRule
-                    metric(title: "1周 剩余", window: snapshot.weeklyWindow, weekly: true, now: context.date)
+                    metric(title: L10n.text("panel.weeklyRemaining"), window: snapshot.weeklyWindow, weekly: true, now: context.date)
                     verticalRule
                     credits(now: context.date)
                 }
@@ -379,12 +379,12 @@ struct TerminalIslandContent: View {
             rule
             VStack(spacing: 10) {
                 HStack {
-                    Text("刷新间隔").foregroundStyle(TerminalPalette.sage)
+                    Text(L10n.text("panel.refreshInterval")).foregroundStyle(TerminalPalette.sage)
                     Spacer()
-                    Button(automaticRefresh ? "自动 ▾" : "手动 ▾") { setAutomaticRefresh(!automaticRefresh) }
+                    Button(automaticRefresh ? L10n.text("panel.automatic") : L10n.text("panel.manual")) { setAutomaticRefresh(!automaticRefresh) }
                         .buttonStyle(.plain)
                         .foregroundStyle(TerminalPalette.sage)
-                        .help("切换自动／手动刷新")
+                        .help(L10n.text("panel.toggleRefresh"))
                     Text(automaticRefresh ? (activity == .active ? "10s" : "15m") : RefreshInterval.labels[intervalIndex])
                         .foregroundStyle(TerminalPalette.green)
                 }
@@ -394,12 +394,12 @@ struct TerminalIslandContent: View {
                         Circle().fill(activity == .unknown ? TerminalPalette.yellow : TerminalPalette.green).frame(width: 5, height: 5)
                         Text(activity.label)
                         Spacer()
-                        Text("运行 10s / 闲置 15m")
+                        Text(L10n.text("panel.activityIntervals"))
                     }
                     .font(IslandFont.mono(10))
                     .foregroundStyle(TerminalPalette.sage)
                     .frame(height: 39)
-                    .help("每 5 秒只读检测本机 Codex 桌面任务；状态未知时每 15 分钟刷新。")
+                    .help(L10n.text("panel.activityHelp"))
                 } else {
                     IntervalSlider(index: $intervalIndex)
                 }
@@ -434,11 +434,11 @@ struct TerminalIslandContent: View {
                     .symbolEffect(.pulse, options: .repeating, isActive: isRefreshing)
             }
             .disabled(isRefreshing)
-            .help("立即刷新")
-            .accessibilityLabel("立即刷新")
+            .help(L10n.text("menu.refreshNow"))
+            .accessibilityLabel(L10n.text("menu.refreshNow"))
             Button(action: { NSApplication.shared.terminate(nil) }) { Image(systemName: "power") }
-                .help("退出 Codex Current")
-                .accessibilityLabel("退出 Codex Current")
+                .help(L10n.text("menu.quit"))
+                .accessibilityLabel(L10n.text("menu.quit"))
         }
         .buttonStyle(TerminalIconButtonStyle())
         .padding(.horizontal, 24)
@@ -468,25 +468,25 @@ struct TerminalIslandContent: View {
     }
 
     private func shortReset(_ date: Date?, now: Date) -> String {
-        guard let date else { return "重置时间 —" }
-        if date <= now { return "即将重置" }
-        return "\(date.formatted(date: .omitted, time: .shortened)) 重置"
+        guard let date else { return L10n.text("reset.noTime") }
+        if date <= now { return L10n.text("reset.soon") }
+        return L10n.format("reset.at", date.formatted(date: .omitted, time: .shortened))
     }
 
     private func credits(now: Date) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("可用 RESET").font(IslandFont.mono(12))
+            Text(L10n.text("panel.availableResets")).font(IslandFont.mono(12))
             HStack(alignment: .lastTextBaseline) {
                 Text(snapshot.availableResetCount.map(String.init) ?? "—")
                     .font(IslandFont.mono(35, weight: .semibold))
                     .foregroundStyle(Color(red: 0.91, green: 0.96, blue: 0.85))
                 Spacer(minLength: 4)
-                Text("有效期").font(IslandFont.mono(9)).foregroundStyle(TerminalPalette.muted)
+                Text(L10n.text("panel.expiry")).font(IslandFont.mono(9)).foregroundStyle(TerminalPalette.muted)
             }
             if let rows = snapshot.resetCredits, !rows.isEmpty {
                 creditList(rows: rows, now: now)
             } else {
-                Text(snapshot.availableResetCount == 0 ? "暂无可用 RESET" : "有效期未提供")
+                Text(snapshot.availableResetCount == 0 ? L10n.text("panel.noResets") : L10n.text("panel.expiryUnavailable"))
                     .font(IslandFont.mono(10)).foregroundStyle(TerminalPalette.muted)
                 Spacer(minLength: 0)
             }
@@ -516,10 +516,10 @@ struct TerminalIslandContent: View {
                                 Text(expiry.label).foregroundStyle(TerminalPalette.expiry(expiry))
                             }
                             .font(IslandFont.mono(10))
-                            .help(credit.title ?? "RESET 有效期")
+                            .help(credit.title ?? L10n.text("panel.expiryHelp"))
                         }
                         if let count = snapshot.availableResetCount, count > rows.count {
-                            Text("另 \(count - rows.count) 个有效期未提供")
+                            Text(L10n.format("panel.moreUnknown", count - rows.count))
                                 .font(IslandFont.mono(9)).foregroundStyle(TerminalPalette.muted)
                         }
         }
@@ -529,22 +529,28 @@ struct TerminalIslandContent: View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
             HStack(spacing: 7) {
                 Circle().fill(snapshot.source == .live ? TerminalPalette.green : TerminalPalette.yellow).frame(width: 5, height: 5)
-                Text(isRefreshing ? "正在刷新…" : snapshot.message ?? age(at: context.date))
+                Text(isRefreshing ? L10n.text("menu.refreshing") : snapshot.message ?? age(at: context.date))
                     .font(IslandFont.mono(10))
                     .foregroundStyle(TerminalPalette.muted)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 24)
-            .help(snapshot.cliVersion.map { "Codex CLI \($0)" } ?? "正在连接 Codex CLI")
+            .help(snapshot.cliVersion.map { "Codex CLI \($0)" } ?? L10n.text("snapshot.connecting"))
         }
     }
 
     private func age(at now: Date) -> String {
         let seconds = max(0, Int(now.timeIntervalSince(snapshot.updatedAt)))
-        if seconds < 60 { return "更新于 \(seconds) 秒前" }
-        if seconds < 3600 { return "更新于 \(seconds / 60) 分钟前" }
-        return "更新于 \(seconds / 3600) 小时前"
+        if seconds < 60 {
+            return seconds == 1 ? L10n.text("footer.updatedSecond") : L10n.format("footer.updatedSeconds", seconds)
+        }
+        let minutes = seconds / 60
+        if seconds < 3600 {
+            return minutes == 1 ? L10n.text("footer.updatedMinute") : L10n.format("footer.updatedMinutes", minutes)
+        }
+        let hours = seconds / 3600
+        return hours == 1 ? L10n.text("footer.updatedHour") : L10n.format("footer.updatedHours", hours)
     }
 }
 
@@ -598,7 +604,7 @@ struct IntervalSlider: View {
         }
         .frame(height: 39)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("刷新间隔")
+        .accessibilityLabel(L10n.text("panel.refreshInterval"))
         .accessibilityValue(RefreshInterval.labels[index])
         .accessibilityAdjustableAction { direction in
             if direction == .increment { index = min(5, index + 1) }
@@ -642,7 +648,8 @@ private struct SegmentedRemainingBar: View {
                     .frame(maxWidth: .infinity, minHeight: height, maxHeight: height)
             }
         }
-        .accessibilityLabel("剩余额度 \(percentage.map { "\(Int($0.rounded()))%" } ?? "未知")")
+        .accessibilityLabel(percentage.map { L10n.format("accessibility.remaining", "\(Int($0.rounded()))%") }
+            ?? L10n.text("accessibility.remainingUnknown"))
     }
 }
 
