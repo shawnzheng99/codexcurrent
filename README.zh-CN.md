@@ -13,12 +13,18 @@
 </p>
 
 <p align="center">
-  一个把 Codex 剩余额度放在手边的原生 macOS 小工具。
+  一个把 Codex 额度放在刘海中的原生 macOS 小工具。
 </p>
 
-Codex Current 不是什么革命性的厉害 App，它也没打算成为那样的产品。它只是让你不用打断工作，就能顺手看一眼 Codex 的 5 小时和每周额度、重置时间，以及可用的 RESET 次数。
+让你不用打断工作，就能顺手看一眼 Codex 的 5 小时和每周额度、重置时间，以及可用的 RESET 次数。
 
 如果它刚好满足你的需求，或许可以帮你少点几下鼠标，也省下一点 token。;)
+
+试一下?
+```sh
+brew install --cask shawnzheng99/tap/codex-current
+codex login
+```
 
 <p align="center">
   <img src="screenshot/expanded-zh.png" width="820" alt="Codex Current 展开模式，显示 Codex 5 小时和每周剩余额度">

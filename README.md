@@ -16,9 +16,15 @@
   A tiny native macOS utility that keeps your Codex usage limits close at hand.
 </p>
 
-Codex Current is not a revolutionary app, and it is not trying to be one. It is simply a convenient way to glance at your Codex 5-hour and weekly limits, reset times, and available RESET credits without interrupting your work.
+It is simply a convenient way to glance at your Codex 5-hour and weekly limits, reset times, and available RESET credits without interrupting your work.
 
 If that happens to fit your workflow, it might save you a few clicks — and perhaps a few tokens. ;)
+
+Try it?
+```sh
+brew install --cask shawnzheng99/tap/codex-current
+codex login
+```
 
 <p align="center">
   <img src="screenshot/expanded-en.png" width="820" alt="Codex Current expanded macOS usage panel showing five-hour and weekly Codex limits">
