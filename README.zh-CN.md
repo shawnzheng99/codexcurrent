@@ -37,6 +37,15 @@ Codex Current 不是什么革命性的厉害 App，它也没打算成为那样�
 
 ## 安装——不需要开发经验
 
+### Homebrew
+
+```sh
+brew install --cask shawnzheng99/tap/codex-current
+codex login
+```
+
+如果 Homebrew 尚未管理 Codex CLI，这个 Cask 会自动将它作为依赖安装。
+
 ### 下载 DMG
 
 1. 确认 Mac 已安装 **macOS 14 Sonoma 或更高版本**。

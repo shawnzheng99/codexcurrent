@@ -37,6 +37,15 @@ That is essentially it. Codex Current is meant to be a small, focused tool rathe
 
 ## Install — no developer experience required
 
+### Homebrew
+
+```sh
+brew install --cask shawnzheng99/tap/codex-current
+codex login
+```
+
+The cask installs Codex CLI as a dependency when Homebrew does not already manage it.
+
 ### Download the DMG
 
 1. Make sure your Mac runs **macOS 14 Sonoma or later**.
