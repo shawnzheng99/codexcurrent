@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/shawnzheng99/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-install%20via%20tap-FBB040?logo=homebrew&amp;logoColor=black" alt="Install with Homebrew"></a>
+</p>
+
+<p align="center">
   <img src="app_icon.png" width="144" alt="Codex Current app icon">
 </p>
 
