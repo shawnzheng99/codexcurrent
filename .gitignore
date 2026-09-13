@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Swift Package Manager / Xcode
+.build/
+.swiftpm/
+DerivedData/
+*.xcresult
+*.dSYM/
+xcuserdata/
+
+# Local app and release artifacts
+Build/
+Dist/
+*.app
+*.dmg
+
+# Signing, notarization, and local secrets
+.env
+.env.*
+*.p8
+*.p12
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
