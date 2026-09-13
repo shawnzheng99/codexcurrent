@@ -17,7 +17,7 @@ Codex Current is not a revolutionary app, and it is not trying to be one. It is 
 If that happens to fit your workflow, it might save you a few clicks — and perhaps a few tokens. ;)
 
 <p align="center">
-  <img src="screenshot/expanded.png" width="820" alt="Codex Current expanded macOS usage panel showing five-hour and weekly Codex limits">
+  <img src="screenshot/expanded-en.png" width="820" alt="Codex Current expanded macOS usage panel showing five-hour and weekly Codex limits">
 </p>
 
 <p align="center">

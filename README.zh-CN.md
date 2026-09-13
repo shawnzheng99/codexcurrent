@@ -17,7 +17,7 @@ Codex Current 不是什么革命性的厉害 App，它也没打算成为那样�
 如果它刚好满足你的需求，或许可以帮你少点几下鼠标，也省下一点 token。;)
 
 <p align="center">
-  <img src="screenshot/expanded.png" width="820" alt="Codex Current 展开模式，显示 Codex 5 小时和每周剩余额度">
+  <img src="screenshot/expanded-zh.png" width="820" alt="Codex Current 展开模式，显示 Codex 5 小时和每周剩余额度">
 </p>
 
 <p align="center">
